@@ -16,6 +16,7 @@ namespace Pinetime {
       void Init();
       void Uninit();
       void DrawPixel(uint16_t x, uint16_t y, uint32_t color);
+      void SetGamma(uint8_t curve);
 
       void VerticalScrollDefinition(uint16_t topFixedLines, uint16_t scrollLines, uint16_t bottomFixedLines);
       void VerticalScrollStartAddress(uint16_t line);
@@ -53,6 +54,7 @@ namespace Pinetime {
         SleepOut = 0x11,
         NormalModeOn = 0x13,
         DisplayInversionOn = 0x21,
+        GammaSet = 0x26,
         DisplayOff = 0x28,
         DisplayOn = 0x29,
         ColumnAddressSet = 0x2a,
@@ -62,7 +64,10 @@ namespace Pinetime {
         VerticalScrollDefinition = 0x33,
         VerticalScrollStartAddress = 0x37,
         ColMod = 0x3a,
+        DigitalGammaEnable = 0xba,
         VdvSet = 0xc4,
+        DigitalGammaLookupRed = 0xe2,
+        DigitalGammaLookupBlue = 0xe3,
       };
       void WriteData(uint8_t data);
       void ColumnAddressSet();

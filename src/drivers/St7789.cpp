@@ -24,6 +24,8 @@ void St7789::Init() {
   DisplayInversionOn();
   NormalModeOn();
   SetVdv();
+  SetGamma(0x08); // G 1.0
+  //SetGamma(0x01); // G 2.2
   DisplayOn();
 }
 
@@ -113,6 +115,11 @@ void St7789::SetAddrWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1) {
 
 void St7789::WriteToRam() {
   WriteCommand(static_cast<uint8_t>(Commands::WriteToRam));
+}
+
+void St7789::SetGamma(uint8_t gamma) {
+  WriteCommand(static_cast<uint8_t>(Commands::GammaSet));
+  WriteData(gamma);
 }
 
 void St7789::SetVdv() {
