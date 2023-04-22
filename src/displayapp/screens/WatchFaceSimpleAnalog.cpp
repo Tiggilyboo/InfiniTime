@@ -42,16 +42,15 @@ namespace {
 
 }
 
-WatchFaceSimpleAnalog::WatchFaceSimpleAnalog(Pinetime::Applications::DisplayApp* app,
-                                             Controllers::DateTime& dateTimeController,
-                                             Controllers::Battery& batteryController,
-                                             Controllers::Ble& bleController,
+WatchFaceSimpleAnalog::WatchFaceSimpleAnalog(Controllers::DateTime& dateTimeController,
+                                             const Controllers::Battery& batteryController,
+                                             const Controllers::Ble& bleController,
                                              Controllers::NotificationManager& notificationManager,
                                              Controllers::Settings& settingsController,
                                              Controllers::HeartRateController& heartRateController,
                                              Controllers::MotionController& motionController)
-  : Screen(app),
-    currentDateTime {{}},
+  : currentDateTime {{}},
+    batteryIcon(true),
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},

@@ -53,6 +53,9 @@ Clock::Clock(Controllers::DateTime& dateTimeController,
         case 5:
           return WatchFaceCasioStyleG7710();
           break;
+        case 6:
+          return WatchFaceSimpleAnalogScreen();
+          break;
       }
       return WatchFaceDigitalScreen();
     }()} {
@@ -82,11 +85,10 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
 }
 
 std::unique_ptr<Screen> Clock::WatchFaceSimpleAnalogScreen() {
-  return std::make_unique<Screens::WatchFaceSimpleAnalog>(app,
-                                                          dateTimeController,
+  return std::make_unique<Screens::WatchFaceSimpleAnalog>(dateTimeController,
                                                           batteryController,
                                                           bleController,
-                                                          notificatioManager,
+                                                          notificationManager,
                                                           settingsController,
                                                           heartRateController,
                                                           motionController);
