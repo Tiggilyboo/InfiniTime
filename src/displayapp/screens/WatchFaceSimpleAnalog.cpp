@@ -282,8 +282,7 @@ void WatchFaceSimpleAnalog::Refresh() {
   }
 
   stepCount = motionController.NbSteps();
-  motionSensorOk = motionController.IsSensorOk();
-  if (stepCount.IsUpdated() || motionSensorOk.IsUpdated()) {
+  if (stepCount.IsUpdated()) {
     uint32_t goal = settingsController.GetStepsGoal();
     uint32_t steps = stepCount.Get();
     int32_t steps_value;
