@@ -1,7 +1,6 @@
-#include "displayapp/screens/CheckboxList.h"
 #include "displayapp/DisplayApp.h"
+#include "displayapp/screens/CheckboxList.h"
 #include "displayapp/screens/Styles.h"
-#include "displayapp/screens/Symbols.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -10,53 +9,25 @@ namespace {
     CheckboxList* screen = static_cast<CheckboxList*>(obj->user_data);
     screen->UpdateSelected(obj, event);
   }
-
 }
 
 CheckboxList::CheckboxList(const uint8_t screenID,
                            const uint8_t numScreens,
-                           DisplayApp* app,
-                           Controllers::Settings& settingsController,
                            const char* optionsTitle,
                            const char* optionsSymbol,
-                           void (Controllers::Settings::*SetOptionIndex)(uint8_t),
-                           uint8_t (Controllers::Settings::*GetOptionIndex)() const,
-                           std::array<const char*, MAXLISTITEMS> options)
-  : Screen(app),
-    screenID {screenID},
-    settingsController {settingsController},
-    SetOptionIndex {SetOptionIndex},
-    GetOptionIndex {GetOptionIndex},
-    options {options} {
-
-  settingsController.SetWatchfacesMenu(screenID);
-
+                           uint32_t originalValue,
+                           std::function<void(uint32_t)> OnValueChanged,
+                           std::array<Item, MaxItems> options)
+  : screenID {screenID},
+    OnValueChanged {std::move(OnValueChanged)},
+    options {options},
+    value {originalValue},
+    pageIndicator(screenID, numScreens) {
   // Set the background to Black
   lv_obj_set_style_local_bg_color(lv_scr_act(), LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 
   if (numScreens > 1) {
-    pageIndicatorBasePoints[0].x = LV_HOR_RES - 1;
-    pageIndicatorBasePoints[0].y = 0;
-    pageIndicatorBasePoints[1].x = LV_HOR_RES - 1;
-    pageIndicatorBasePoints[1].y = LV_VER_RES;
-
-    pageIndicatorBase = lv_line_create(lv_scr_act(), NULL);
-    lv_obj_set_style_local_line_width(pageIndicatorBase, LV_LINE_PART_MAIN, LV_STATE_DEFAULT, 3);
-    lv_obj_set_style_local_line_color(pageIndicatorBase, LV_LINE_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x111111));
-    lv_line_set_points(pageIndicatorBase, pageIndicatorBasePoints, 2);
-
-    const uint16_t indicatorSize = LV_VER_RES / numScreens;
-    const uint16_t indicatorPos = indicatorSize * screenID;
-
-    pageIndicatorPoints[0].x = LV_HOR_RES - 1;
-    pageIndicatorPoints[0].y = indicatorPos;
-    pageIndicatorPoints[1].x = LV_HOR_RES - 1;
-    pageIndicatorPoints[1].y = indicatorPos + indicatorSize;
-
-    pageIndicator = lv_line_create(lv_scr_act(), NULL);
-    lv_obj_set_style_local_line_width(pageIndicator, LV_LINE_PART_MAIN, LV_STATE_DEFAULT, 3);
-    lv_obj_set_style_local_line_color(pageIndicator, LV_LINE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_GRAY);
-    lv_line_set_points(pageIndicator, pageIndicatorPoints, 2);
+    pageIndicator.Create();
   }
 
   lv_obj_t* container1 = lv_cont_create(lv_scr_act(), nullptr);
@@ -83,14 +54,17 @@ CheckboxList::CheckboxList(const uint8_t screenID,
   lv_obj_align(icon, title, LV_ALIGN_OUT_LEFT_MID, -10, 0);
 
   for (unsigned int i = 0; i < options.size(); i++) {
-    if (strcmp(options[i], "")) {
+    if (strcmp(options[i].name, "")) {
       cbOption[i] = lv_checkbox_create(container1, nullptr);
-      lv_checkbox_set_text(cbOption[i], options[i]);
+      lv_checkbox_set_text(cbOption[i], options[i].name);
+      if (!options[i].enabled) {
+        lv_checkbox_set_disabled(cbOption[i]);
+      }
       cbOption[i]->user_data = this;
       lv_obj_set_event_cb(cbOption[i], event_handler);
       SetRadioButtonStyle(cbOption[i]);
 
-      if (static_cast<unsigned int>((settingsController.*GetOptionIndex)() - MAXLISTITEMS * screenID) == i) {
+      if (static_cast<unsigned int>(originalValue - MaxItems * screenID) == i) {
         lv_checkbox_set_checked(cbOption[i], true);
       }
     }
@@ -99,18 +73,21 @@ CheckboxList::CheckboxList(const uint8_t screenID,
 
 CheckboxList::~CheckboxList() {
   lv_obj_clean(lv_scr_act());
-  settingsController.SaveSettings();
+  OnValueChanged(value);
 }
 
 void CheckboxList::UpdateSelected(lv_obj_t* object, lv_event_t event) {
   if (event == LV_EVENT_VALUE_CHANGED) {
     for (unsigned int i = 0; i < options.size(); i++) {
-      if (strcmp(options[i], "")) {
+      if (strcmp(options[i].name, "")) {
         if (object == cbOption[i]) {
           lv_checkbox_set_checked(cbOption[i], true);
-          (settingsController.*SetOptionIndex)(MAXLISTITEMS * screenID + i);
+          value = MaxItems * screenID + i;
         } else {
           lv_checkbox_set_checked(cbOption[i], false);
+        }
+        if (!options[i].enabled) {
+          lv_checkbox_set_disabled(cbOption[i]);
         }
       }
     }

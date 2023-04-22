@@ -13,6 +13,7 @@ namespace Pinetime::Applications::Screens {
   enum class States { Init, Running, Halted };
 
   struct TimeSeparated_t {
+    int hours;
     int mins;
     int secs;
     int hundredths;
@@ -20,29 +21,35 @@ namespace Pinetime::Applications::Screens {
 
   class StopWatch : public Screen {
   public:
-    StopWatch(DisplayApp* app, System::SystemTask& systemTask);
+    explicit StopWatch(System::SystemTask& systemTask);
     ~StopWatch() override;
     void Refresh() override;
 
-    void playPauseBtnEventHandler(lv_event_t event);
-    void stopLapBtnEventHandler(lv_event_t event);
+    void playPauseBtnEventHandler();
+    void stopLapBtnEventHandler();
     bool OnButtonPushed() override;
+
+  private:
+    void SetInterfacePaused();
+    void SetInterfaceRunning();
+    void SetInterfaceStopped();
 
     void Reset();
     void Start();
     void Pause();
 
-  private:
     Pinetime::System::SystemTask& systemTask;
     States currentState = States::Init;
     TickType_t startTime;
     TickType_t oldTimeElapsed = 0;
+    TickType_t blinkTime = 0;
     static constexpr int maxLapCount = 20;
     TickType_t laps[maxLapCount + 1];
     static constexpr int displayedLaps = 2;
     int lapsDone = 0;
     lv_obj_t *time, *msecTime, *btnPlayPause, *btnStopLap, *txtPlayPause, *txtStopLap;
     lv_obj_t* lapText;
+    bool isHoursLabelUpdated = false;
 
     lv_task_t* taskRefresh;
   };

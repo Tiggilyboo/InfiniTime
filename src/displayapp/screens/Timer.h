@@ -7,12 +7,12 @@
 #include "displayapp/widgets/Counter.h"
 #include <lvgl/lvgl.h>
 
-#include "components/timer/TimerController.h"
+#include "components/timer/Timer.h"
 
 namespace Pinetime::Applications::Screens {
   class Timer : public Screen {
   public:
-    Timer(DisplayApp* app, Controllers::TimerController& timerController);
+    Timer(Controllers::Timer& timerController);
     ~Timer() override;
     void Refresh() override;
     void Reset();
@@ -24,9 +24,8 @@ namespace Pinetime::Applications::Screens {
     void SetTimerRunning();
     void SetTimerStopped();
     void UpdateMask();
-    Controllers::TimerController& timerController;
+    Controllers::Timer& timer;
 
-    lv_obj_t* msecTime;
     lv_obj_t* btnPlayPause;
     lv_obj_t* txtPlayPause;
 
@@ -40,7 +39,7 @@ namespace Pinetime::Applications::Screens {
     Widgets::Counter secondCounter = Widgets::Counter(0, 59, jetbrains_mono_76);
 
     bool buttonPressing = false;
-    int maskPosition = 0;
-    TickType_t pressTime;
+    lv_coord_t maskPosition = 0;
+    TickType_t pressTime = 0;
   };
 }

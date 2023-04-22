@@ -1,17 +1,16 @@
 #pragma once
+#include <cstdint>
 
 namespace Pinetime {
   namespace System {
-    enum class Messages {
+    enum class Messages : uint8_t {
       GoToSleep,
       GoToRunning,
       TouchWakeUp,
       OnNewTime,
       OnNewNotification,
-      OnTimerDone,
       OnNewCall,
       BleConnected,
-      UpdateTimeOut,
       BleFirmwareUpdateStarted,
       BleFirmwareUpdateFinished,
       OnTouchEvent,
@@ -26,7 +25,6 @@ namespace Pinetime {
       OnChargingEvent,
       OnPairing,
       SetOffAlarm,
-      StopRinging,
       MeasureBatteryTimerExpired,
       BatteryPercentageUpdated,
       StartFileTransfer,

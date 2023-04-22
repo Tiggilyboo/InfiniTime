@@ -1,48 +1,44 @@
 #pragma once
 
-#include <lvgl/lvgl.h>
-#include <cstdint>
-#include <memory>
-#include "displayapp/screens/Screen.h"
 #include "displayapp/Apps.h"
-#include "components/settings/Settings.h"
-
-#define MAXLISTITEMS 4
+#include "displayapp/screens/Screen.h"
+#include <array>
+#include <cstdint>
+#include <functional>
+#include <lvgl/lvgl.h>
+#include <memory>
+#include "displayapp/widgets/PageIndicator.h"
 
 namespace Pinetime {
   namespace Applications {
     namespace Screens {
       class CheckboxList : public Screen {
       public:
+        static constexpr size_t MaxItems = 4;
+
+        struct Item {
+          const char* name;
+          bool enabled;
+        };
+
         CheckboxList(const uint8_t screenID,
                      const uint8_t numScreens,
-                     DisplayApp* app,
-                     Controllers::Settings& settingsController,
                      const char* optionsTitle,
                      const char* optionsSymbol,
-                     void (Controllers::Settings::*SetOptionIndex)(uint8_t),
-                     uint8_t (Controllers::Settings::*GetOptionIndex)() const,
-                     std::array<const char*, MAXLISTITEMS> options);
-
+                     uint32_t originalValue,
+                     std::function<void(uint32_t)> OnValueChanged,
+                     std::array<Item, MaxItems> options);
         ~CheckboxList() override;
-
         void UpdateSelected(lv_obj_t* object, lv_event_t event);
 
       private:
         const uint8_t screenID;
-        Controllers::Settings& settingsController;
-        const char* optionsTitle;
-        const char* optionsSymbol;
-        void (Controllers::Settings::*SetOptionIndex)(uint8_t);
-        uint8_t (Controllers::Settings::*GetOptionIndex)() const;
-        std::array<const char*, MAXLISTITEMS> options;
+        std::function<void(uint32_t)> OnValueChanged;
+        std::array<Item, MaxItems> options;
+        std::array<lv_obj_t*, MaxItems> cbOption;
+        uint32_t value;
 
-        lv_obj_t* cbOption[MAXLISTITEMS];
-
-        lv_point_t pageIndicatorBasePoints[2];
-        lv_point_t pageIndicatorPoints[2];
-        lv_obj_t* pageIndicatorBase;
-        lv_obj_t* pageIndicator;
+        Widgets::PageIndicator pageIndicator;
       };
     }
   }

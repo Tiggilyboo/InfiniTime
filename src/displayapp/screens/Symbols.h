@@ -34,9 +34,9 @@ namespace Pinetime {
         static constexpr const char* hourGlass = "\xEF\x89\x92";
         static constexpr const char* lapsFlag = "\xEF\x80\xA4";
         static constexpr const char* drum = "\xEF\x95\xA9";
-        static constexpr const char* chartLine = "\xEF\x88\x81";
         static constexpr const char* eye = "\xEF\x81\xAE";
         static constexpr const char* home = "\xEF\x80\x95";
+        static constexpr const char* sleep = "\xEE\xBD\x84";
 
         // lv_font_sys_48.c
         static constexpr const char* settings = "\xEE\xA2\xB8";
@@ -49,6 +49,7 @@ namespace Pinetime {
         static constexpr const char* notificationsOn = "\xEE\x9F\xB7";
 
         static constexpr const char* flashlight = "\xEF\x80\x8B";
+        static constexpr const char* paintbrushLg = "\xEE\x90\x8A";
       }
     }
   }

@@ -1,6 +1,7 @@
 #include "displayapp/screens/Timer.h"
 #include "displayapp/screens/Screen.h"
 #include "displayapp/screens/Symbols.h"
+#include "displayapp/InfiniTimeTheme.h"
 #include <lvgl/lvgl.h>
 
 using namespace Pinetime::Applications::Screens;
@@ -16,7 +17,7 @@ static void btnEventHandler(lv_obj_t* obj, lv_event_t event) {
   }
 }
 
-Timer::Timer(DisplayApp* app, Controllers::TimerController& timerController) : Screen(app), timerController {timerController} {
+Timer::Timer(Controllers::Timer& timerController) : timer {timerController} {
 
   lv_obj_t* colonLabel = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(colonLabel, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_76);
@@ -54,7 +55,7 @@ Timer::Timer(DisplayApp* app, Controllers::TimerController& timerController) : S
   btnPlayPause = lv_btn_create(btnObjectMask, nullptr);
   btnPlayPause->user_data = this;
   lv_obj_set_style_local_radius(btnPlayPause, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_RADIUS_CIRCLE);
-  lv_obj_set_style_local_bg_color(btnPlayPause, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_MAKE(0x38, 0x38, 0x38));
+  lv_obj_set_style_local_bg_color(btnPlayPause, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Colors::bgAlt);
   lv_obj_set_event_cb(btnPlayPause, btnEventHandler);
   lv_obj_set_size(btnPlayPause, LV_HOR_RES, 50);
 
@@ -84,7 +85,7 @@ void Timer::MaskReset() {
   buttonPressing = false;
   // A click event is processed before a release event,
   // so the release event would override the "Pause" text without this check
-  if (!timerController.IsRunning()) {
+  if (!timer.IsRunning()) {
     lv_label_set_text_static(txtPlayPause, "Start");
   }
   maskPosition = 0;
@@ -102,10 +103,10 @@ void Timer::UpdateMask() {
 }
 
 void Timer::Refresh() {
-  if (timerController.IsRunning()) {
-    uint32_t seconds = timerController.GetTimeRemaining() / 1000;
-    minuteCounter.SetValue(seconds / 60);
-    secondCounter.SetValue(seconds % 60);
+  if (timer.IsRunning()) {
+    auto secondsRemaining = std::chrono::duration_cast<std::chrono::seconds>(timer.GetTimeRemaining());
+    minuteCounter.SetValue(secondsRemaining.count() / 60);
+    secondCounter.SetValue(secondsRemaining.count() % 60);
   } else if (buttonPressing && xTaskGetTickCount() > pressTime + pdMS_TO_TICKS(150)) {
     lv_label_set_text_static(txtPlayPause, "Reset");
     maskPosition += 15;
@@ -131,14 +132,15 @@ void Timer::SetTimerStopped() {
 }
 
 void Timer::ToggleRunning() {
-  if (timerController.IsRunning()) {
-    uint32_t seconds = timerController.GetTimeRemaining() / 1000;
-    minuteCounter.SetValue(seconds / 60);
-    secondCounter.SetValue(seconds % 60);
-    timerController.StopTimer();
+  if (timer.IsRunning()) {
+    auto secondsRemaining = std::chrono::duration_cast<std::chrono::seconds>(timer.GetTimeRemaining());
+    minuteCounter.SetValue(secondsRemaining.count() / 60);
+    secondCounter.SetValue(secondsRemaining.count() % 60);
+    timer.StopTimer();
     SetTimerStopped();
   } else if (secondCounter.GetValue() + minuteCounter.GetValue() > 0) {
-    timerController.StartTimer((secondCounter.GetValue() + minuteCounter.GetValue() * 60) * 1000);
+    auto timerDuration = std::chrono::minutes(minuteCounter.GetValue()) + std::chrono::seconds(secondCounter.GetValue());
+    timer.StartTimer(timerDuration);
     Refresh();
     SetTimerRunning();
   }

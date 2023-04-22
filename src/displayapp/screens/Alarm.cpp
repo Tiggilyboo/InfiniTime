@@ -18,6 +18,7 @@
 #include "displayapp/screens/Alarm.h"
 #include "displayapp/screens/Screen.h"
 #include "displayapp/screens/Symbols.h"
+#include "displayapp/InfiniTimeTheme.h"
 
 using namespace Pinetime::Applications::Screens;
 using Pinetime::Controllers::AlarmController;
@@ -39,11 +40,11 @@ static void StopAlarmTaskCallback(lv_task_t* task) {
   screen->StopAlerting();
 }
 
-Alarm::Alarm(DisplayApp* app,
-             Controllers::AlarmController& alarmController,
+Alarm::Alarm(Controllers::AlarmController& alarmController,
              Controllers::Settings::ClockType clockType,
-             System::SystemTask& systemTask)
-  : Screen(app), alarmController {alarmController}, systemTask {systemTask} {
+             System::SystemTask& systemTask,
+             Controllers::MotorController& motorController)
+  : alarmController {alarmController}, systemTask {systemTask}, motorController {motorController} {
 
   hourCounter.Create();
   lv_obj_align(hourCounter.GetObject(), nullptr, LV_ALIGN_IN_TOP_LEFT, 0, 0);
@@ -79,7 +80,7 @@ Alarm::Alarm(DisplayApp* app,
   lv_label_set_text_static(txtStop, Symbols::stop);
   lv_obj_set_hidden(btnStop, true);
 
-  static constexpr lv_color_t bgColor = LV_COLOR_MAKE(0x38, 0x38, 0x38);
+  static constexpr lv_color_t bgColor = Colors::bgAlt;
 
   btnRecur = lv_btn_create(lv_scr_act(), nullptr);
   btnRecur->user_data = this;
@@ -199,11 +200,13 @@ void Alarm::SetAlerting() {
   lv_obj_set_hidden(enableSwitch, true);
   lv_obj_set_hidden(btnStop, false);
   taskStopAlarm = lv_task_create(StopAlarmTaskCallback, pdMS_TO_TICKS(60 * 1000), LV_TASK_PRIO_MID, this);
+  motorController.StartRinging();
   systemTask.PushMessage(System::Messages::DisableSleeping);
 }
 
 void Alarm::StopAlerting() {
   alarmController.StopAlerting();
+  motorController.StopRinging();
   SetSwitchState(LV_ANIM_OFF);
   if (taskStopAlarm != nullptr) {
     lv_task_del(taskStopAlarm);
