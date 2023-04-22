@@ -298,7 +298,7 @@ Notifications::NotificationItem::NotificationItem(const char* title,
   lv_obj_set_style_local_border_width(subject_container, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
 
   lv_obj_set_pos(subject_container, 0, 37);
-  lv_obj_set_size(subject_container, LV_HOR_RES, LV_VER_RES - 66);
+  lv_obj_set_size(subject_container, LV_HOR_RES, LV_VER_RES - (notifNb > 0 ? 66 : 37));
   lv_cont_set_layout(subject_container, LV_LAYOUT_COLUMN_LEFT);
   lv_cont_set_fit(subject_container, LV_FIT_NONE);
 
