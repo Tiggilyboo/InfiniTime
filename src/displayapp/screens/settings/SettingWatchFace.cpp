@@ -4,6 +4,7 @@
 #include "displayapp/screens/CheckboxList.h"
 #include "displayapp/screens/Screen.h"
 #include "components/settings/Settings.h"
+#include "displayapp/WatchFaces.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -48,9 +49,9 @@ std::unique_ptr<Screen> SettingWatchFace::CreateScreen(unsigned int screenNum) c
     nScreens,
     title,
     symbol,
-    settingsController.GetClockFace(),
-    [&settings = settingsController](uint32_t clockFace) {
-      settings.SetClockFace(clockFace);
+    static_cast<uint32_t>(settingsController.GetWatchFace()),
+    [&settings = settingsController](uint32_t index) {
+      settings.SetWatchFace(static_cast<WatchFace>(index));
       settings.SaveSettings();
     },
     watchfacesOnThisScreen);
