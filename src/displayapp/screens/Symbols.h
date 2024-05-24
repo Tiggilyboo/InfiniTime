@@ -11,6 +11,7 @@ namespace Pinetime {
         static constexpr const char* plug = "\xEF\x87\xA6";
         static constexpr const char* shoe = "\xEF\x95\x8B";
         static constexpr const char* clock = "\xEF\x80\x97";
+        static constexpr const char* bell = "\xEF\x83\xB3";
         static constexpr const char* info = "\xEF\x84\xA9";
         static constexpr const char* list = "\xEF\x80\xBA";
         static constexpr const char* sun = "\xEF\x86\x85";
@@ -34,6 +35,7 @@ namespace Pinetime {
         static constexpr const char* hourGlass = "\xEF\x89\x92";
         static constexpr const char* lapsFlag = "\xEF\x80\xA4";
         static constexpr const char* drum = "\xEF\x95\xA9";
+        static constexpr const char* dice = "\xEF\x94\xA2";
         static constexpr const char* eye = "\xEF\x81\xAE";
         static constexpr const char* home = "\xEF\x80\x95";
         static constexpr const char* sleep = "\xEE\xBD\x84";
@@ -45,6 +47,9 @@ namespace Pinetime {
         static constexpr const char* cloudShowersHeavy = "\xEF\x9D\x80";
         static constexpr const char* smog = "\xEF\x9D\x9F";
         static constexpr const char* cloud = "\xEF\x83\x82";
+        static constexpr const char* cloudMeatball = "\xEF\x9C\xBB";
+        static constexpr const char* bolt = "\xEF\x83\xA7";
+        static constexpr const char* snowflake = "\xEF\x8B\x9C";
         static constexpr const char* ban = "\xEF\x81\x9E";
 
         // lv_font_sys_48.c
@@ -62,7 +67,6 @@ namespace Pinetime {
 
         // used for notification stack icons
         static constexpr const char* questionCircle = "\xEF\x81\x99"; // F059
-        static constexpr const char* bell = "\xEF\x83\xB3";           // F0F3
         static constexpr const char* envelope = "\xEF\x83\xA0";       // F0E0
         static constexpr const char* newspaper = "\xEF\x87\xAA";      // F1EA
         static constexpr const char* smsBubble = "\xEF\x9F\x8D";      // F7CD

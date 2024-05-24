@@ -29,12 +29,13 @@ namespace Pinetime {
       struct Notification {
         using Id = uint8_t;
         using Idx = uint8_t;
-        Id id = 0;
-        bool valid = false;
+
+        std::array<char, MessageSize + 1> message;
         uint8_t size;
         std::time_t timeArrived;
-        std::array<char, MessageSize + 1> message;
         Categories category = Categories::Unknown;
+        Id id = 0;
+        bool valid = false;
 
         const char* Message() const;
         const char* Title() const;

@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <displayapp/Controllers.h>
 #include "displayapp/screens/Screen.h"
 #include "components/datetime/DateTimeController.h"
 #include "components/battery/BatteryController.h"
@@ -99,5 +100,25 @@ namespace Pinetime {
         lv_task_t* taskRefresh;
       };
     }
+
+    template <>
+    struct WatchFaceTraits<WatchFace::SimpleAnalog> {
+      static constexpr WatchFace watchFace = WatchFace::SimpleAnalog;
+      static constexpr const char* name = "Simple Analog";
+
+      static Screens::Screen* Create(AppControllers& controllers) {
+        return new Screens::WatchFaceSimpleAnalog(controllers.dateTimeController,
+                                                  controllers.batteryController,
+                                                  controllers.bleController,
+                                                  controllers.notificationManager,
+                                                  controllers.settingsController,
+                                                  controllers.heartRateController,
+                                                  controllers.motionController);
+      };
+
+      static bool IsAvailable(Pinetime::Controllers::FS&) {
+        return true;
+      }
+    };
   }
 }
