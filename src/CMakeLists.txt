@@ -422,10 +422,7 @@ list(APPEND SOURCE_FILES
         ## Watch faces
         displayapp/screens/WatchFaceAnalog.cpp
         displayapp/screens/WatchFaceDigital.cpp
-        displayapp/screens/WatchFaceInfineat.cpp
         displayapp/screens/WatchFaceTerminal.cpp
-        displayapp/screens/WatchFacePineTimeStyle.cpp
-        displayapp/screens/WatchFaceCasioStyleG7710.cpp
         displayapp/screens/WatchFaceSimpleAnalog.cpp
 
         ##

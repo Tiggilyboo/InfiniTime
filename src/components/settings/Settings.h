@@ -202,13 +202,6 @@ namespace Pinetime {
       Notification GetNotificationStatus() const {
         return settings.notificationStatus;
       };
-      void SetWatchfacesMenu(uint8_t menu) {
-        watchFacesMenu = menu;
-      };
-
-      uint8_t GetWatchfacesMenu() const {
-        return watchFacesMenu;
-      };
 
       void SetScreenTimeOut(uint32_t timeout) {
         if (timeout != settings.screenTimeOut) {

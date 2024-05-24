@@ -116,7 +116,7 @@ namespace Pinetime {
                                                   controllers.motionController);
       };
 
-      static bool IsAvailable(Pinetime::Controllers::FS&) {
+      static bool IsAvailable(Pinetime::Controllers::FS& /*filesystem*/) {
         return true;
       }
     };
