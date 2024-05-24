@@ -49,7 +49,6 @@ namespace Pinetime {
       Digital,
       Analog,
       Terminal,
-      SimpleAnalog,
     };
 
     template <Apps>

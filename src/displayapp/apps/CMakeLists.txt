@@ -24,7 +24,6 @@ else()
     set(DEFAULT_WATCHFACE_TYPES "WatchFace::Digital")
     set(DEFAULT_WATCHFACE_TYPES "${DEFAULT_WATCHFACE_TYPES}, WatchFace::Analog")
     set(DEFAULT_WATCHFACE_TYPES "${DEFAULT_WATCHFACE_TYPES}, WatchFace::Terminal")
-    set(DEFAULT_FATCHFACE_TYPES "${DEFAULT_WATCHFACE_TYPES}, WatchFace::SimpleAnalog")
     set(WATCHFACE_TYPES "${DEFAULT_WATCHFACE_TYPES}" CACHE STRING "List of watch faces to build into the firmware")
 endif()
 

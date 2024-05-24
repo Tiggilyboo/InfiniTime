@@ -11,7 +11,6 @@
 #include "displayapp/screens/WatchFaceDigital.h"
 #include "displayapp/screens/WatchFaceAnalog.h"
 #include "displayapp/screens/WatchFaceTerminal.h"
-#include "displayapp/screens/WatchFaceSimpleAnalog.h"
 
 namespace Pinetime {
   namespace Applications {

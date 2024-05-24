@@ -46,7 +46,7 @@ namespace Pinetime {
     template <>
     struct AppTraits<Apps::Weather> {
       static constexpr Apps app = Apps::Weather;
-      static constexpr const char* icon = Screens::Symbols::cloudSunRain;
+      static constexpr const char* icon = Screens::Symbols::cloudSun;
 
       static Screens::Screen* Create(AppControllers& controllers) {
         return new Screens::Weather(controllers.settingsController, *controllers.weatherController);
