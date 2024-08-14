@@ -50,6 +50,7 @@ namespace Pinetime {
         Utility::DirtyValue<bool> isCharging {};
         Utility::DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> currentDateTime;
         Utility::DirtyValue<bool> notificationState {false};
+        Utility::DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::days>> currentDate;
         Utility::DirtyValue<bool> bleState {};
         Utility::DirtyValue<bool> bleRadioEnabled {};
         Utility::DirtyValue<bool> motionSensorOk {};
@@ -86,7 +87,7 @@ namespace Pinetime {
 
         BatteryIcon batteryIcon;
 
-        const Controllers::DateTime& dateTimeController;
+        Controllers::DateTime& dateTimeController;
         const Controllers::Battery& batteryController;
         const Controllers::Ble& bleController;
         Controllers::NotificationManager& notificationManager;

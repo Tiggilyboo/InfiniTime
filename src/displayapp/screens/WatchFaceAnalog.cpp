@@ -251,18 +251,11 @@ void WatchFaceAnalog::Refresh() {
   currentDateTime = dateTimeController.CurrentDateTime();
 
   if (currentDateTime.IsUpdated()) {
-    Pinetime::Controllers::DateTime::Months month = dateTimeController.Month();
-    uint8_t day = dateTimeController.Day();
-    Pinetime::Controllers::DateTime::Days dayOfWeek = dateTimeController.DayOfWeek();
-
     UpdateClock();
 
-    if ((month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
-      lv_label_set_text_fmt(label_date_day, "%s %02i", dateTimeController.DayOfWeekShortToString(), day);
-
-      currentMonth = month;
-      currentDayOfWeek = dayOfWeek;
-      currentDay = day;
+    currentDate = std::chrono::time_point_cast<std::chrono::days>(currentDateTime.Get());
+    if (currentDate.IsUpdated()) {
+      lv_label_set_text_fmt(label_date_day, "%s %02i", dateTimeController.DayOfWeekShortToString(), dateTimeController.Day());
     }
   }
 

@@ -5,8 +5,6 @@
 
 using namespace Pinetime::Controllers;
 
-constexpr uint8_t NotificationManager::MessageSize;
-
 void NotificationManager::Push(NotificationManager::Notification&& notif) {
   notif.id = GetNextId();
   notif.valid = true;

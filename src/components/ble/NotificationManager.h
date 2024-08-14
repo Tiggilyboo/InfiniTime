@@ -41,7 +41,7 @@ namespace Pinetime {
         const char* Title() const;
       };
 
-      NotificationManager(const Controllers::DateTime& dateTimeController)
+      NotificationManager(Controllers::DateTime& dateTimeController)
         : dateTimeController {dateTimeController} {
       }
 
@@ -68,7 +68,7 @@ namespace Pinetime {
       size_t NbNotifications() const;
 
     private:
-      const Controllers::DateTime& dateTimeController;
+      Controllers::DateTime& dateTimeController;
       Notification::Id nextId {0};
       Notification::Id GetNextId();
       const Notification& At(Notification::Idx idx) const;
