@@ -10,6 +10,7 @@
 #include "components/motor/MotorController.h"
 #include "components/datetime/DateTimeController.h"
 #include "systemtask/SystemTask.h"
+#include "systemtask/WakeLock.h"
 
 namespace Pinetime {
   namespace Controllers {
@@ -82,7 +83,7 @@ namespace Pinetime {
         Pinetime::Controllers::AlertNotificationService& alertNotificationService;
         Pinetime::Controllers::DateTime& dateTimeController;
         Pinetime::Controllers::MotorController& motorController;
-        System::SystemTask& systemTask;
+        System::WakeLock wakeLock;
         Modes mode = Modes::Normal;
         std::unique_ptr<NotificationItem> currentItem;
         Pinetime::Controllers::NotificationManager::Notification::Id currentId;
